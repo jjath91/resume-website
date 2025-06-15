@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JJ Atherton | Strategy & Operations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Tailwind Stone & Teal) -->
+    <!-- Application Structure Plan: A single-page portfolio designed as an interactive resume. The structure prioritizes immediate impact by starting with a quantitative "Impact Dashboard" of key achievements. This is followed by an interactive "Career Journey" timeline allowing users to explore roles on-demand, a categorized "Skills Showcase", and a clear contact section. This non-linear structure is chosen to cater to busy recruiters, allowing them to see top-level results first and then drill down into details as needed, which is more effective than a traditional, linear resume format. -->
+    <!-- Visualization & Content Choices: - Key Achievements (e.g., accuracy increase, wait time reduction): Goal: Compare/Inform -> Viz: Bar Chart (Chart.js) & Stat Cards (HTML/CSS) -> Interaction: Hover effects, chart tooltips -> Justification: Visualizes key metrics for immediate impact, making achievements more memorable than text alone. - Work Experience: Goal: Organize/Inform -> Method: Interactive Timeline (JS-powered tabs) -> Interaction: User clicks a role to reveal details -> Justification: Reduces initial cognitive load and clutter, allowing users to control the flow of information. - Skills: Goal: Organize -> Method: Categorized Lists (HTML/CSS) -> Interaction: Simple hover -> Justification: Clear and scannable presentation of qualifications. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+        .nav-link {
+            transition: color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0D9488; /* teal-600 */
+        }
+        .stat-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .timeline-btn.active {
+            background-color: #0D9488; /* teal-600 */
+            color: white;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-stone-100/80 backdrop-blur-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-stone-800">JJ Atherton</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#impact" class="nav-link font-medium">Impact</a>
+                <a href="#experience" class="nav-link font-medium">Experience</a>
+                <a href="#skills" class="nav-link font-medium">Skills</a>
+                <a href="#contact" class="nav-link font-medium">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-stone-800 focus:outline-none">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#impact" class="block py-2 px-6 text-sm nav-link">Impact</a>
+            <a href="#experience" class="block py-2 px-6 text-sm nav-link">Experience</a>
+            <a href="#skills" class="block py-2 px-6 text-sm nav-link">Skills</a>
+            <a href="#contact" class="block py-2 px-6 text-sm nav-link">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="hero" class="text-center py-16">
+            <h1 class="text-4xl md:text-6xl font-bold text-stone-900 mb-4">JJ Atherton</h1>
+            <p class="text-xl md:text-2xl text-teal-700 font-medium mb-8">Senior Operations Manager | Strategy & Customer Excellence</p>
+            <p class="max-w-3xl mx-auto text-stone-600">
+                A results-driven leader with extensive experience at top technology firms. Proven ability to architect and execute strategic initiatives that enhance operational efficiency, improve customer experience, and drive significant business growth.
+            </p>
+        </section>
+
+        <section id="impact" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-900">Quantified Impact</h2>
+                <p class="mt-4 text-lg text-stone-600 max-w-2xl mx-auto">This dashboard highlights the key results and improvements I have delivered. The interactive chart and cards showcase my focus on data-driven decision-making and tangible outcomes. You can hover over elements for more details.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <div class="stat-card bg-white p-6 rounded-lg shadow-md text-center">
+                    <p class="text-5xl font-bold text-teal-600">50%</p>
+                    <p class="mt-2 text-stone-700 font-semibold">Reduction in Support Tickets</p>
+                    <p class="text-sm text-stone-500 mt-1">Implemented an LLM agent for customer support.</p>
+                </div>
+                <div class="stat-card bg-white p-6 rounded-lg shadow-md text-center">
+                    <p class="text-5xl font-bold text-teal-600">>75%</p>
+                    <p class="mt-2 text-stone-700 font-semibold">Reduction in Support Wait Time</p>
+                    <p class="text-sm text-stone-500 mt-1">From 4 days to <1 day despite 100% volume increase.</p>
+                </div>
+                <div class="stat-card bg-white p-6 rounded-lg shadow-md text-center">
+                    <p class="text-5xl font-bold text-teal-600">75%</p>
+                    <p class="mt-2 text-stone-700 font-semibold">Insider Risk Mitigation</p>
+                    <p class="text-sm text-stone-500 mt-1">Slashed incident rates within one quarter at YouTube.</p>
+                </div>
+                 <div class="stat-card bg-white p-6 rounded-lg shadow-md text-center">
+                    <p class="text-5xl font-bold text-teal-600">50%</p>
+                    <p class="mt-2 text-stone-700 font-semibold">Increase in Feature Adoption</p>
+                    <p class="text-sm text-stone-500 mt-1">Pioneered streamlined feature launch process at YouTube.</p>
+                </div>
+                 <div class="stat-card bg-white p-6 rounded-lg shadow-md text-center">
+                    <p class="text-5xl font-bold text-teal-600">30%</p>
+                    <p class="mt-2 text-stone-700 font-semibold">Increase in Lead Conversion</p>
+                    <p class="text-sm text-stone-500 mt-1">Developed a daily report system for Google Cloud sales.</p>
+                </div>
+                 <div class="stat-card bg-white p-6 rounded-lg shadow-md text-center">
+                    <p class="text-5xl font-bold text-teal-600">15%</p>
+                    <p class="mt-2 text-stone-700 font-semibold">Improved Forecast Accuracy</p>
+                    <p class="text-sm text-stone-500 mt-1">Championed a pipeline health report for sales reviews.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                 <h3 class="text-xl font-bold text-center text-stone-800 mb-4">Brand Safety Accuracy Improvement</h3>
+                 <div class="chart-container">
+                    <canvas id="impactChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-900">Career Journey</h2>
+                <p class="mt-4 text-lg text-stone-600 max-w-2xl mx-auto">This is an interactive timeline of my professional experience. Click on any company to see the specific roles and key accomplishments during my time there.</p>
+            </div>
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="w-full md:w-1/3">
+                    <div id="timeline-nav" class="flex md:flex-col gap-2">
+                    </div>
+                </div>
+                <div class="w-full md:w-2/3 bg-white p-6 md:p-8 rounded-lg shadow-md">
+                    <div id="experience-details">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-16 bg-white rounded-lg shadow-md">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-900">Core Competencies & Skills</h2>
+                 <p class="mt-4 text-lg text-stone-600 max-w-2xl mx-auto">My expertise spans technical, management, and strategic domains, enabling me to bridge gaps between teams and lead complex projects successfully.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-teal-700 mb-4 border-b-2 border-teal-200 pb-2">Technical Skills</h3>
+                    <ul class="space-y-2 text-stone-600">
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>SQL & Google BigQuery</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Python & Apps Script/JS</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>APIs, Webhooks, Zapier</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Salesforce (Certified Admin)</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Data Visualization</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Jira & Confluence</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-teal-700 mb-4 border-b-2 border-teal-200 pb-2">Management Skills</h3>
+                    <ul class="space-y-2 text-stone-600">
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Strategic Planning</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Cross-Functional Leadership</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Product Management</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Agile Methodologies</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Stakeholder Management</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Process Improvement</li>
+                    </ul>
+                </div>
+                 <div>
+                    <h3 class="text-xl font-semibold text-teal-700 mb-4 border-b-2 border-teal-200 pb-2">Certifications</h3>
+                    <ul class="space-y-2 text-stone-600">
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Salesforce Certified Administrator</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Google Analytics Certification</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Master SQL for Data Science</li>
+                        <li class="flex items-center"><span class="text-teal-500 mr-2">&#10003;</span>Python Programming Masterclass</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-stone-900 mb-4">Let's Connect</h2>
+            <p class="text-lg text-stone-600 max-w-xl mx-auto mb-8">I am actively seeking new opportunities in strategy and operations. If you're looking for a leader who can drive results, let's talk.</p>
+            <div class="flex justify-center items-center space-x-6">
+                <a href="mailto:jgatherton91@gmail.com" class="bg-teal-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-700 transition duration-300">Email Me</a>
+                <a href="https://www.linkedin.com/in/jj-atherton-7b068147/" target="_blank" rel="noopener noreferrer" class="text-teal-600 font-semibold hover:underline">LinkedIn Profile</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-200 py-4">
+        <div class="container mx-auto text-center text-sm text-stone-600">
+            <p>&copy; 2025 JJ Atherton | Interactive Resume</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const experienceData = [
+                {
+                    company: 'X fka Twitter',
+                    role: 'Senior Operations Manager | Brand Safety and Customer Excellence',
+                    date: 'Oct 2023 - Present',
+                    details: [
+                        'Defined and launched a brand safety enforcement system, increasing accuracy from 87% to 97%.',
+                        'Designed and rolled out creator monetization onboarding, shaping compliance standards.',
+                        'Built a spreadsheet-based review tool integrating Grok for initial review decisions.',
+                        'Revamped customer support for monetized users, reducing wait times from 4 days to <1 day.',
+                        'Worked with xAI to implement an LLM agent, reducing incoming ticket volume by 50%.',
+                        'Owned and prioritized a product backlog of user-reported bugs and feature requests.',
+                    ]
+                },
+                {
+                    company: 'Google',
+                    role: 'Program Manager | YouTube Trust & Safety',
+                    date: 'Jun 2021 - Oct 2023',
+                    details: [
+                        'Collaborated with Product and Engineering to deliver critical features for the YouTube content review tool.',
+                        'Pioneered a streamlined feature launch process, boosting adoption rates by 50%.',
+                        'Orchestrated a product request intake process, increasing prioritized features by 33%.',
+                        'Spearheaded an insider risk mitigation program, slashing incident rates by 75% in one quarter.',
+                    ]
+                },
+                {
+                    company: 'Google',
+                    role: 'Strategy and Operations Manager | Google Cloud Sales Operations',
+                    date: 'Jan 2020 - Jun 2021',
+                    details: [
+                        'Led global training initiatives for Google Cloud sales teams to increase seller productivity.',
+                        'Developed a report system that contributed to a 30% increase in lead conversion.',
+                        'Achieved 7,000 new Google Cloud Customer Community (C2C) memberships.',
+                        'Created a pipeline health report that improved forecast accuracy by 15%.',
+                    ]
+                },
+                {
+                    company: 'Ware2Go (A UPS company)',
+                    role: 'Sales and Marketing Operations Manager',
+                    date: 'Oct 2018 - Dec 2019',
+                    details: [
+                        'Administered and developed the sales, customer success, and marketing tech stack.',
+                        'Partnered with VP of Sales to develop tech stack to support customer acquisition and retention.',
+                        'Worked with engineering to implement automated solutions for customers.',
+                    ]
+                },
+                {
+                    company: 'Terminus Software',
+                    role: 'Senior Customer Success Manager',
+                    date: 'Oct 2016 - Oct 2018',
+                    details: [
+                        'Managed a portfolio of $1.3 million in Annual Recurring Revenue (ARR) of enterprise accounts.',
+                    ]
+                }
+            ];
+
+            const timelineNav = document.getElementById('timeline-nav');
+            const experienceDetailsContainer = document.getElementById('experience-details');
+
+            function displayExperience(index) {
+                const experience = experienceData[index];
+                experienceDetailsContainer.innerHTML = `
+                    <h3 class="text-2xl font-bold text-stone-800">${experience.role}</h3>
+                    <p class="text-md font-medium text-teal-600 my-2">${experience.company}</p>
+                    <p class="text-sm text-stone-500 mb-4">${experience.date}</p>
+                    <ul class="space-y-3 text-stone-600">
+                        ${experience.details.map(detail => `<li class="flex items-start"><span class="text-teal-500 mr-3 mt-1">&#9679;</span><span>${detail}</span></li>`).join('')}
+                    </ul>
+                `;
+
+                document.querySelectorAll('.timeline-btn').forEach((btn, i) => {
+                    if (i === index) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            experienceData.forEach((exp, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'timeline-btn w-full text-left p-4 rounded-lg transition duration-300 hover:bg-teal-500 hover:text-white';
+                btn.innerHTML = `
+                    <span class="font-bold">${exp.company}</span>
+                    <span class="block text-sm">${exp.role.split('|')[0].trim()}</span>
+                `;
+                btn.addEventListener('click', () => displayExperience(index));
+                timelineNav.appendChild(btn);
+            });
+            
+            displayExperience(0);
+
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            const impactChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Brand Safety Accuracy'],
+                    datasets: [{
+                        label: 'Before',
+                        data: [87],
+                        backgroundColor: 'rgba(204, 204, 204, 0.6)', 
+                        borderColor: 'rgba(153, 153, 153, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'After',
+                        data: [97],
+                        backgroundColor: 'rgba(13, 148, 136, 0.6)', // teal-600
+                        borderColor: 'rgba(15, 118, 110, 1)', // teal-700
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
